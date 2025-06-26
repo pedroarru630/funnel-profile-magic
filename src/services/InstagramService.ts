@@ -59,7 +59,7 @@ export class InstagramService {
         return {
           username: profileData.username || cleanUsername,
           fullName: profileData.fullName,
-          profilePicUrlHD: profileData.profilePicUrlHD || '/placeholder.svg',
+          profilePicUrlHD: profileData.profilePicUrlHD || `https://www.instagram.com/${cleanUsername}/`,
           exists: true
         };
       }
@@ -77,7 +77,7 @@ export class InstagramService {
         
         // Check if we also have detailed profile data with profile picture
         const items = apifyResponse.data?.items || [];
-        let profilePicUrlHD = '/placeholder.svg';
+        let profilePicUrlHD = `https://scontent-cdg4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=Yx4hrjVrjIsQ7kNvgGrTEdY&_nc_gid=bef4e65e5c2c4055bfb7e55c90e77d7e&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYAawJlcHJQFKcDGz9xW4DH0bQkr2WOc8J6nqUOe2R_9XA&oe=67771FDA&_nc_sid=10d13b`;
         let fullName = urlUsername;
         
         if (items.length > 0) {
@@ -115,7 +115,7 @@ export class InstagramService {
         return {
           username: profileData.username || cleanUsername,
           fullName: profileData.fullName,
-          profilePicUrlHD: profileData.profilePicUrlHD || '/placeholder.svg',
+          profilePicUrlHD: profileData.profilePicUrlHD || `https://scontent-cdg4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=Yx4hrjVrjIsQ7kNvgGrTEdY&_nc_gid=bef4e65e5c2c4055bfb7e55c90e77d7e&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYAawJlcHJQFKcDGz9xW4DH0bQkr2WOc8J6nqUOe2R_9XA&oe=67771FDA&_nc_sid=10d13b`,
           exists: true
         };
       }
@@ -124,7 +124,7 @@ export class InstagramService {
       return {
         username: cleanUsername,
         fullName: undefined,
-        profilePicUrlHD: '/placeholder.svg',
+        profilePicUrlHD: `https://scontent-cdg4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=Yx4hrjVrjIsQ7kNvgGrTEdY&_nc_gid=bef4e65e5c2c4055bfb7e55c90e77d7e&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYAawJlcHJQFKcDGz9xW4DH0bQkr2WOc8J6nqUOe2R_9XA&oe=67771FDA&_nc_sid=10d13b`,
         exists: false
       };
       
@@ -133,7 +133,7 @@ export class InstagramService {
       return {
         username: username.replace('@', ''),
         fullName: undefined,
-        profilePicUrlHD: '/placeholder.svg',
+        profilePicUrlHD: `https://scontent-cdg4-1.cdninstagram.com/v/t51.2885-19/44884218_345707102882519_2446069589734326272_n.jpg?_nc_ht=scontent-cdg4-1.cdninstagram.com&_nc_cat=1&_nc_ohc=Yx4hrjVrjIsQ7kNvgGrTEdY&_nc_gid=bef4e65e5c2c4055bfb7e55c90e77d7e&edm=APs17CUBAAAA&ccb=7-5&oh=00_AYAawJlcHJQFKcDGz9xW4DH0bQkr2WOc8J6nqUOe2R_9XA&oe=67771FDA&_nc_sid=10d13b`,
         exists: false
       };
     }
