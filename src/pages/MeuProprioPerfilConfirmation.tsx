@@ -21,7 +21,6 @@ const MeuProprioPerfilConfirmation = () => {
       const parsed = JSON.parse(storedProfile);
       console.log('MeuProprioPerfilConfirmation - Loaded profile data:', parsed);
       console.log('MeuProprioPerfilConfirmation - profilePicUrlHD:', parsed.profilePicUrlHD);
-      console.log('MeuProprioPerfilConfirmation - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
       setProfileData(parsed);
     } else {
       // If no profile data, redirect back to input
@@ -49,15 +48,9 @@ const MeuProprioPerfilConfirmation = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  
-  // More thorough validation for profile picture
-  const hasValidProfilePic = profileData.profilePicUrlHD && 
-                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
-                            profileData.profilePicUrlHD !== '' &&
-                            profileData.profilePicUrlHD.startsWith('http');
+  const profileImage = profileData.profilePicUrlHD;
 
-  console.log('MeuProprioPerfilConfirmation - hasValidProfilePic:', hasValidProfilePic);
-  console.log('MeuProprioPerfilConfirmation - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
+  console.log('MeuProprioPerfilConfirmation - Using profileImage:', profileImage);
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col">
@@ -73,11 +66,11 @@ const MeuProprioPerfilConfirmation = () => {
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
               <AvatarImage 
-                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                src={profileImage}
                 alt={displayName}
                 onLoad={() => console.log('MeuProprioPerfilConfirmation - Profile image loaded successfully')}
                 onError={(e) => {
-                  console.log('MeuProprioPerfilConfirmation - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('MeuProprioPerfilConfirmation - Profile image failed to load:', profileImage);
                   console.log('MeuProprioPerfilConfirmation - Error details:', e);
                 }}
               />

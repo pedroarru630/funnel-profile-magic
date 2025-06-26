@@ -23,7 +23,6 @@ const Results = () => {
       const parsed = JSON.parse(storedProfile);
       console.log('Results - Loaded profile data:', parsed);
       console.log('Results - profilePicUrlHD:', parsed.profilePicUrlHD);
-      console.log('Results - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
       setProfileData(parsed);
     }
   }, []);
@@ -41,15 +40,9 @@ const Results = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  
-  // More thorough validation for profile picture
-  const hasValidProfilePic = profileData.profilePicUrlHD && 
-                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
-                            profileData.profilePicUrlHD !== '' &&
-                            profileData.profilePicUrlHD.startsWith('http');
+  const profileImage = profileData.profilePicUrlHD;
 
-  console.log('Results - hasValidProfilePic:', hasValidProfilePic);
-  console.log('Results - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
+  console.log('Results - Using profileImage:', profileImage);
 
   const findings = [
     `3 conversas com chamada de vídeo foram excluídas no direct de ${profileData.username}`,
@@ -73,11 +66,11 @@ const Results = () => {
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
               <AvatarImage 
-                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                src={profileImage}
                 alt={displayName}
                 onLoad={() => console.log('Results - Profile image loaded successfully')}
                 onError={(e) => {
-                  console.log('Results - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('Results - Profile image failed to load:', profileImage);
                   console.log('Results - Error details:', e);
                 }}
               />

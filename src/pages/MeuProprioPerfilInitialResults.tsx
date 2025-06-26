@@ -22,7 +22,6 @@ const MeuProprioPerfilInitialResults = () => {
       const parsed = JSON.parse(storedProfile);
       console.log('MeuProprioPerfilInitialResults - Loaded profile data:', parsed);
       console.log('MeuProprioPerfilInitialResults - profilePicUrlHD:', parsed.profilePicUrlHD);
-      console.log('MeuProprioPerfilInitialResults - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
       setProfileData(parsed);
     } else {
       navigate('/meu-proprio-perfil-input');
@@ -42,15 +41,9 @@ const MeuProprioPerfilInitialResults = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  
-  // More thorough validation for profile picture
-  const hasValidProfilePic = profileData.profilePicUrlHD && 
-                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
-                            profileData.profilePicUrlHD !== '' &&
-                            profileData.profilePicUrlHD.startsWith('http');
+  const profileImage = profileData.profilePicUrlHD;
 
-  console.log('MeuProprioPerfilInitialResults - hasValidProfilePic:', hasValidProfilePic);
-  console.log('MeuProprioPerfilInitialResults - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
+  console.log('MeuProprioPerfilInitialResults - Using profileImage:', profileImage);
 
   const findings = [
     `Foram encontradas 9 menções a @${profileData.username} em mensagens no direct`,
@@ -74,11 +67,11 @@ const MeuProprioPerfilInitialResults = () => {
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
               <AvatarImage 
-                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                src={profileImage}
                 alt={displayName}
                 onLoad={() => console.log('MeuProprioPerfilInitialResults - Profile image loaded successfully')}
                 onError={(e) => {
-                  console.log('MeuProprioPerfilInitialResults - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('MeuProprioPerfilInitialResults - Profile image failed to load:', profileImage);
                   console.log('MeuProprioPerfilInitialResults - Error details:', e);
                 }}
               />
