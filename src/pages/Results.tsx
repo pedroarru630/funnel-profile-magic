@@ -21,7 +21,9 @@ const Results = () => {
     const storedProfile = sessionStorage.getItem('other_instagram_profile');
     if (storedProfile) {
       const parsed = JSON.parse(storedProfile);
-      console.log('Results page - loaded profile data:', parsed);
+      console.log('Results - Loaded profile data:', parsed);
+      console.log('Results - profilePicUrlHD:', parsed.profilePicUrlHD);
+      console.log('Results - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
       setProfileData(parsed);
     }
   }, []);
@@ -39,7 +41,15 @@ const Results = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  const hasValidProfilePic = profileData.profilePicUrlHD && profileData.profilePicUrlHD !== '/placeholder.svg';
+  
+  // More thorough validation for profile picture
+  const hasValidProfilePic = profileData.profilePicUrlHD && 
+                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
+                            profileData.profilePicUrlHD !== '' &&
+                            profileData.profilePicUrlHD.startsWith('http');
+
+  console.log('Results - hasValidProfilePic:', hasValidProfilePic);
+  console.log('Results - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
 
   const findings = [
     `3 conversas com chamada de vídeo foram excluídas no direct de ${profileData.username}`,
@@ -48,9 +58,6 @@ const Results = () => {
     `${profileData.username} tem um fã! Um super stalker está visitando seu perfil por 11 dias consecutivos`,
     `3 perfis que não seguem ${profileData.username} adicionaram nos melhores amigos`
   ];
-
-  console.log('Results page - hasValidProfilePic:', hasValidProfilePic);
-  console.log('Results page - profilePicUrlHD:', profileData.profilePicUrlHD);
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col">
@@ -65,16 +72,15 @@ const Results = () => {
           {/* Profile picture */}
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
-              {hasValidProfilePic ? (
-                <AvatarImage 
-                  src={profileData.profilePicUrlHD}
-                  alt={displayName}
-                  onError={(e) => {
-                    console.log('Profile image failed to load, using fallback');
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : null}
+              <AvatarImage 
+                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                alt={displayName}
+                onLoad={() => console.log('Results - Profile image loaded successfully')}
+                onError={(e) => {
+                  console.log('Results - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('Results - Error details:', e);
+                }}
+              />
               <AvatarFallback className="text-2xl bg-orange-100 text-orange-600">
                 {displayName.charAt(0).toUpperCase()}
               </AvatarFallback>

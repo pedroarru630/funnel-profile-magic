@@ -18,10 +18,11 @@ const MeuProprioPerfilInitialResults = () => {
 
   useEffect(() => {
     const storedProfile = sessionStorage.getItem('instagram_profile');
-    console.log('Stored profile data:', storedProfile);
     if (storedProfile) {
       const parsed = JSON.parse(storedProfile);
-      console.log('Parsed profile data:', parsed);
+      console.log('MeuProprioPerfilInitialResults - Loaded profile data:', parsed);
+      console.log('MeuProprioPerfilInitialResults - profilePicUrlHD:', parsed.profilePicUrlHD);
+      console.log('MeuProprioPerfilInitialResults - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
       setProfileData(parsed);
     } else {
       navigate('/meu-proprio-perfil-input');
@@ -41,10 +42,15 @@ const MeuProprioPerfilInitialResults = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  const hasValidProfilePic = profileData.profilePicUrlHD && profileData.profilePicUrlHD !== '/placeholder.svg';
+  
+  // More thorough validation for profile picture
+  const hasValidProfilePic = profileData.profilePicUrlHD && 
+                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
+                            profileData.profilePicUrlHD !== '' &&
+                            profileData.profilePicUrlHD.startsWith('http');
 
   console.log('MeuProprioPerfilInitialResults - hasValidProfilePic:', hasValidProfilePic);
-  console.log('MeuProprioPerfilInitialResults - profilePicUrlHD:', profileData.profilePicUrlHD);
+  console.log('MeuProprioPerfilInitialResults - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
 
   const findings = [
     `Foram encontradas 9 menções a @${profileData.username} em mensagens no direct`,
@@ -67,16 +73,15 @@ const MeuProprioPerfilInitialResults = () => {
           {/* Profile picture */}
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
-              {hasValidProfilePic ? (
-                <AvatarImage 
-                  src={profileData.profilePicUrlHD} 
-                  alt={displayName}
-                  onError={(e) => {
-                    console.log('Profile image failed to load, using fallback');
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              ) : null}
+              <AvatarImage 
+                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                alt={displayName}
+                onLoad={() => console.log('MeuProprioPerfilInitialResults - Profile image loaded successfully')}
+                onError={(e) => {
+                  console.log('MeuProprioPerfilInitialResults - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('MeuProprioPerfilInitialResults - Error details:', e);
+                }}
+              />
               <AvatarFallback className="text-2xl bg-orange-100 text-orange-600">
                 {displayName.charAt(0).toUpperCase()}
               </AvatarFallback>

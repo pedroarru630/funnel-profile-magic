@@ -18,7 +18,11 @@ const MeuProprioPerfilConfirmation = () => {
   useEffect(() => {
     const storedProfile = sessionStorage.getItem('instagram_profile');
     if (storedProfile) {
-      setProfileData(JSON.parse(storedProfile));
+      const parsed = JSON.parse(storedProfile);
+      console.log('MeuProprioPerfilConfirmation - Loaded profile data:', parsed);
+      console.log('MeuProprioPerfilConfirmation - profilePicUrlHD:', parsed.profilePicUrlHD);
+      console.log('MeuProprioPerfilConfirmation - profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
+      setProfileData(parsed);
     } else {
       // If no profile data, redirect back to input
       navigate('/meu-proprio-perfil-input');
@@ -45,7 +49,15 @@ const MeuProprioPerfilConfirmation = () => {
   }
 
   const displayName = profileData.fullName || profileData.username;
-  const hasValidProfilePic = profileData.profilePicUrlHD && profileData.profilePicUrlHD !== '/placeholder.svg';
+  
+  // More thorough validation for profile picture
+  const hasValidProfilePic = profileData.profilePicUrlHD && 
+                            profileData.profilePicUrlHD !== '/placeholder.svg' && 
+                            profileData.profilePicUrlHD !== '' &&
+                            profileData.profilePicUrlHD.startsWith('http');
+
+  console.log('MeuProprioPerfilConfirmation - hasValidProfilePic:', hasValidProfilePic);
+  console.log('MeuProprioPerfilConfirmation - Final profilePicUrlHD check:', profileData.profilePicUrlHD);
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col">
@@ -60,16 +72,15 @@ const MeuProprioPerfilConfirmation = () => {
           {/* Profile picture */}
           <div className="flex justify-center mb-6">
             <Avatar className="w-24 h-24">
-              {hasValidProfilePic && (
-                <AvatarImage 
-                  src={profileData.profilePicUrlHD} 
-                  alt={displayName}
-                  onError={(e) => {
-                    console.log('Profile image failed to load, using fallback');
-                    e.currentTarget.style.display = 'none';
-                  }}
-                />
-              )}
+              <AvatarImage 
+                src={hasValidProfilePic ? profileData.profilePicUrlHD : undefined}
+                alt={displayName}
+                onLoad={() => console.log('MeuProprioPerfilConfirmation - Profile image loaded successfully')}
+                onError={(e) => {
+                  console.log('MeuProprioPerfilConfirmation - Profile image failed to load:', profileData.profilePicUrlHD);
+                  console.log('MeuProprioPerfilConfirmation - Error details:', e);
+                }}
+              />
               <AvatarFallback className="text-2xl bg-orange-100 text-orange-600">
                 {displayName.charAt(0).toUpperCase()}
               </AvatarFallback>
