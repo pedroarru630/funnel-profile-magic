@@ -1,4 +1,5 @@
 
+
 interface InstagramProfile {
   username: string;
   fullName?: string;
@@ -49,7 +50,20 @@ export class InstagramService {
       }
 
       const responseJson = await response.json();
-      console.log('Full Apify API response:', responseJson);
+      console.log('=== RAW APIFY API RESPONSE ===');
+      console.log('Full response:', JSON.stringify(responseJson, null, 2));
+      console.log('Response type:', typeof responseJson);
+      console.log('Is array?', Array.isArray(responseJson));
+      
+      if (Array.isArray(responseJson)) {
+        console.log('Response length:', responseJson.length);
+        if (responseJson.length > 0) {
+          console.log('First item:', JSON.stringify(responseJson[0], null, 2));
+          console.log('First item profilePicUrlHD:', responseJson[0].profilePicUrlHD);
+          console.log('First item username:', responseJson[0].username);
+          console.log('First item fullName:', responseJson[0].fullName);
+        }
+      }
 
       // The key fix: Apify returns an array, we need the first element
       if (Array.isArray(responseJson) && responseJson.length > 0) {
@@ -139,3 +153,4 @@ export class InstagramService {
     }
   }
 }
+

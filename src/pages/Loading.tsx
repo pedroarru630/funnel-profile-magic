@@ -1,4 +1,3 @@
-
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -12,7 +11,11 @@ const Loading = () => {
     const fetchProfile = async () => {
       const username = sessionStorage.getItem('other_instagram_username');
       
+      console.log('=== OTHER PEOPLE PROFILE FLOW START ===');
+      console.log('Username from sessionStorage:', username);
+      
       if (!username) {
+        console.log('No username found, redirecting to input page');
         navigate('/perfil-outras-pessoas');
         return;
       }
@@ -21,8 +24,24 @@ const Loading = () => {
         console.log('Starting Instagram profile fetch for other person:', username);
         const profileData = await InstagramService.getProfile(username);
         
+        console.log('=== PROFILE DATA RECEIVED FROM SERVICE ===');
+        console.log('Full profileData object:', JSON.stringify(profileData, null, 2));
+        console.log('profileData.exists:', profileData.exists);
+        console.log('profileData.username:', profileData.username);
+        console.log('profileData.fullName:', profileData.fullName);
+        console.log('profileData.profilePicUrlHD:', profileData.profilePicUrlHD);
+        console.log('profilePicUrlHD type:', typeof profileData.profilePicUrlHD);
+        
         if (profileData.exists) {
+          console.log('Profile exists, storing in sessionStorage');
           sessionStorage.setItem('other_instagram_profile', JSON.stringify(profileData));
+          
+          // Verify what was stored
+          const stored = sessionStorage.getItem('other_instagram_profile');
+          console.log('=== STORED IN SESSION STORAGE ===');
+          console.log('Stored data:', stored);
+          console.log('Parsed stored data:', JSON.parse(stored || '{}'));
+          
           console.log('Other person profile found, redirecting to confirmation');
           navigate('/profile-confirmation');
         } else {
@@ -33,7 +52,8 @@ const Loading = () => {
           }, 3000);
         }
       } catch (error) {
-        console.error('Error fetching other person profile:', error);
+        console.error('=== ERROR IN OTHER PEOPLE PROFILE FETCH ===');
+        console.error('Error details:', error);
         setError('Erro ao buscar perfil. Tente novamente.');
         setTimeout(() => {
           navigate('/perfil-outras-pessoas');

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useNavigate } from "react-router-dom";
@@ -17,14 +16,21 @@ const ProfileConfirmation = () => {
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
 
   useEffect(() => {
+    console.log('=== PROFILE CONFIRMATION PAGE - OTHER PEOPLE ===');
     const storedProfile = sessionStorage.getItem('other_instagram_profile');
+    console.log('Raw stored profile from sessionStorage:', storedProfile);
+    
     if (storedProfile) {
       const parsed = JSON.parse(storedProfile);
-      console.log('ProfileConfirmation - Loaded profile data:', parsed);
-      console.log('ProfileConfirmation - profilePicUrlHD:', parsed.profilePicUrlHD);
+      console.log('Parsed profile data:', JSON.stringify(parsed, null, 2));
+      console.log('parsed.profilePicUrlHD:', parsed.profilePicUrlHD);
+      console.log('parsed.profilePicUrlHD type:', typeof parsed.profilePicUrlHD);
+      console.log('parsed.username:', parsed.username);
+      console.log('parsed.fullName:', parsed.fullName);
+      console.log('parsed.exists:', parsed.exists);
       setProfileData(parsed);
     } else {
-      // If no profile data, redirect back to input
+      console.log('No profile data found in sessionStorage, redirecting to input');
       navigate('/perfil-outras-pessoas');
     }
   }, [navigate]);
@@ -51,7 +57,10 @@ const ProfileConfirmation = () => {
   const displayName = profileData.fullName || profileData.username;
   const profileImage = profileData.profilePicUrlHD;
 
-  console.log('ProfileConfirmation - Using profileImage:', profileImage);
+  console.log('=== PROFILE CONFIRMATION RENDER DATA ===');
+  console.log('displayName:', displayName);
+  console.log('profileImage:', profileImage);
+  console.log('profileImage type:', typeof profileImage);
 
   return (
     <div className="min-h-screen bg-gray-200 flex flex-col">
@@ -69,7 +78,7 @@ const ProfileConfirmation = () => {
               <AvatarImage 
                 src={profileImage}
                 alt={displayName}
-                onLoad={() => console.log('ProfileConfirmation - Profile image loaded successfully')}
+                onLoad={() => console.log('ProfileConfirmation - Profile image loaded successfully:', profileImage)}
                 onError={(e) => {
                   console.log('ProfileConfirmation - Profile image failed to load:', profileImage);
                   console.log('ProfileConfirmation - Error details:', e);
